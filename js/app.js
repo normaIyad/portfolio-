@@ -3,12 +3,11 @@
 
 let menu = document.querySelector("nav ul");
 console.log(menu);
-let nemudata = ["About me", "Skills", "Projects", "Contact me"]
+let nemudata = document.querySelectorAll("section")
 for (let i = 0; i < nemudata.length; i++) {
-
   let list_item = document.createElement("li");
   let ancher = document.createElement("a");
-  ancher.textContent = nemudata[i];
+  ancher.textContent = nemudata[i].getAttribute("data-nav");
   ancher.href = `#section${i + 1}`;
   list_item.appendChild(ancher);
   menu.appendChild(list_item);
@@ -22,6 +21,28 @@ menuTraggle.addEventListener("click", function () {
   let contenerofnemu = document.querySelector("nav .container");
   contenerofnemu.classList.toggle("colom");
 });
+function enableSmoothScrolling() {
+  const navLinks = document.querySelectorAll('nav ul li a'); // Select all navigation links
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault(); // Prevent default anchor behavior
+
+      const targetId = link.getAttribute('href').substring(1); // Get the target section ID
+      const targetSection = document.getElementById(targetId);
+
+      if (targetSection) {
+        targetSection.scrollIntoView({
+          behavior: 'smooth', // Enable smooth scrolling
+          block: 'start',     // Align to the top of the section
+        });
+      }
+    });
+  });
+}
+
+// Call the function to enable smooth scrolling
+enableSmoothScrolling();
 
 // Section 1
 let section1 = () => {
@@ -227,34 +248,109 @@ function section() {
 // Trigger animation when the section is in view
 window.addEventListener('scroll', () => {
   const skillsSection = document.querySelector('.our-skills');
-  const skillsSectionTop = (skillsSection.getBoundingClientRect().top + 400);
+  const skillsSectionTop = (skillsSection.getBoundingClientRect().top );
   const windowHeight = window.innerHeight;
   if (skillsSectionTop < windowHeight) {
     animateProgressBars();
   }
 });
-// Function to handle adding active class to navigation items
-function setActiveNav() {
-  const sections = document.querySelectorAll("section"); // Select all sections
-  const navLinks = document.querySelectorAll("nav ul li a"); // Select all nav links
-   console.log(navLinks);
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const navLink = document.querySelector(`nav ul li a[href="#${entry.target.id}"]`);
-      console.log(`${entry.target.id}`);
-      sections.forEach((section) => section.classList.remove("active"));
-      // Add active class to the current section
-      entry.target.classList.add("active");
-      if (entry.isIntersecting) {
-        navLinks.forEach((link) => link.classList.remove("active")); // Remove active class from all links
-        navLink.classList.add("active"); // Add active class to the corresponding link
+// // Function to handle adding active class to navigation items
+// function setActiveNav() {
+//   const sections = document.querySelectorAll("section"); // Select all sections
+//   const navLinks = document.querySelectorAll("nav ul li a"); // Select all nav links
+//    console.log(navLinks);
+//   const observer = new IntersectionObserver((entries) => {
+//     entries.forEach((entry) => {
+//       const navLink = document.querySelector(`nav ul li a[href="#${entry.target.id}"]`);
+//       console.log(`${entry.target.id}`);
+//       sections.forEach((section) => section.classList.remove("active"));
+//       // Add active class to the current section
+//       entry.target.classList.add("active");
+//       if (entry.isIntersecting) {
+//         navLinks.forEach((link) => link.classList.remove("active")); // Remove active class from all links
+//         navLink.classList.add("active"); // Add active class to the corresponding link
+//       }
+//     });
+//     console.log(observer);
+//   }, { threshold: 0.6 }); // Adjust threshold as needed for when section is considered "in view"
+
+//   sections.forEach((section) => observer.observe(section));
+// }
+
+// // Call the function to activate the observer
+// setActiveNav();
+function setActiveSection() {
+  const sections = document.querySelectorAll("section");
+  const navLinks = document.querySelectorAll("nav ul li a");
+
+  // Listen for the scroll event
+  window.addEventListener("scroll", () => {
+    sections.forEach((section) => {
+      const sections = document.querySelectorAll("section");
+      const rect = section.getBoundingClientRect();
+      const sectionId = section.getAttribute("id");
+      
+      // Check if the section is in the viewport
+      if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+        // Remove active class from all links
+        navLinks.forEach((link) => link.classList.remove("active"));
+        sections.forEach((section) => section.classList.remove("active"));
+        // Add active class to the current link
+        const activeLink = document.querySelector(`nav ul li a[href="#${sectionId}"]`);
+        console.log(sectionId);
+        let activeClass = document.querySelector(`#${sectionId}`);
+        console.log(activeClass);
+        if (activeClass) activeClass.classList.add("active");
+        if (activeLink) {
+          activeLink.classList.add("active");
+        }
       }
     });
-    console.log(observer);
-  }, { threshold: 0.6 }); // Adjust threshold as needed for when section is considered "in view"
-
-  sections.forEach((section) => observer.observe(section));
+  });
 }
 
-// Call the function to activate the observer
-setActiveNav();
+document.addEventListener("DOMContentLoaded", setActiveSection);
+let scrollTimeout;
+window.addEventListener("scroll", () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    // Call the active section logic
+    setActiveSection();
+  }, 100);
+});
+function handleFormSubmission() {
+  const form = document.querySelector(".contact-form form"); // Select the form element
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent the form from refreshing the page
+
+    // Collect form data
+    const formData = new FormData(form);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const message = formData.get("message");
+
+    // Validate form data
+    if (!name || !email || !message) {
+      alert("Please fill out all fields before submitting.");
+      return;
+    }
+
+    // Example: Display form data in console (replace with actual logic like sending data to a server)
+    console.log("Form Data:");
+    console.log(`Name: ${name}`);
+    console.log(`Email: ${email}`);
+    console.log(`Message: ${message}`);
+
+    // Reset the form after successful submission
+    form.reset();
+
+    // Provide feedback to the user
+    alert("Thank you! Your message has been sent.");
+  });
+}
+
+// Call the function to activate form handling
+handleFormSubmission();
+
+

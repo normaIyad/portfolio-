@@ -10,6 +10,7 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  height: 1000vh;
 }
 
 .container {
@@ -105,6 +106,17 @@ nav .logo {
 nav ul li a.active {
   color: #f39c12; /* Highlight color */
   font-weight: bold;
+}
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+  }
+  nav ul {
+    display: none; /* Hide menu on mobile */
+  }
+  nav .menu-toggle {
+    display: block; /* Show hamburger menu */
+  }
 }
 
 @media (max-width: 1900px) {
@@ -207,10 +219,56 @@ nav ul li a.active {
   background-color: var(--maincolor);
   color: white;
 }
+@media (max-width: 768px) {
+  /* Adjust layout for tablets and phones */
+  .container {
+    padding: 10px;
+  }
+  .header {
+    font-size: 24px;
+  }
+  /* Other responsive adjustments */
+}
+@media (max-width: 768px) {
+  /* Adjust layout for tablets and phones */
+  .container {
+    padding: 10px;
+  }
+  .header {
+    font-size: 14px;
+  }
+  .img{
+    display: none;
+  }
+  .landing h1 {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  /* Other responsive adjustments */
+}
+@media (max-width: 480px) {
+  /* Adjust layout for small devices */
+  .header {
+    font-size: 18px;
+  }
+  .content {
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 1250px) {
   .landing{
     flex-direction: column-reverse;
     align-items: center;
+  }
+  .landing .text{
+    margin-bottom: 20px;
+    font-size: 18px;
+  }
+}
+@media (max-width: 900px) {
+  .landing .img{
+    display: none !important;;
   }
 }
 /* end landing  */
@@ -269,6 +327,14 @@ nav ul li a.active {
   /* Initial state */
   transition: width 0.8s linear;
   /* Smooth transition */
+}
+@media (max-width: 968px) {
+  .our-skills {
+    width: 100%;
+  }
+  #section2.img{
+    display: none;
+  }
 }
 /* our skils end */
 /* section 3  projects*/
@@ -407,8 +473,8 @@ footer .social-media a{
   color: white;
   margin-right: 20px;
 }
-
-section.active {
+/* Active section */
+.active {
   animation: jumpsection 3s  ease-in-out; /* Use alternate for smooth transition */
   position: relative; /* Required for left and top to take effect */
 }
@@ -425,5 +491,33 @@ section.active {
   100% {
     transform: translateY(0); /* End at the original position */
     opacity: 100%;
+  }
+}
+.skill .the-progress {
+  width: 100%; /* Ensure the parent container has a fixed width */
+  background-color: #ddd; /* Optional: Background for progress bar */
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden; /* Prevent overflow issues */
+}
+
+.skill .the-progress span {
+  display: block;
+  height: 100%;
+  background-color: #2196f3; /* Progress bar color */
+  width: 0; /* Start width at 0 */
+  transition: width 1s ease-in-out; /* Smooth transition */
+}
+
+/* Medium */
+@media (max-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+/* Large */
+@media (max-width: 1200px) {
+  .container {
+    width: 1170px;
   }
 }
